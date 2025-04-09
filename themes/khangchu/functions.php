@@ -32,6 +32,15 @@ function gioithieu_css () {
 function tintuc_css () {
     wp_enqueue_style( "tintuc_css",  get_template_directory_uri(). '/css/tintuc.css', array(),"1.0.0", "all" );
 }
+function enqueue_slick_slider() {
+    // CSS
+    wp_enqueue_style('slick-css', get_template_directory_uri() . '/css/slick.css');
+    wp_enqueue_style('slick-theme', get_template_directory_uri() . '/css/slick-theme.css');
+
+    // JS (phụ thuộc jQuery)
+    wp_enqueue_script('slick-js', get_template_directory_uri() . '/js/slick.min.js', array('jquery'), null, true);
+}
+add_action('wp_enqueue_scripts', 'enqueue_slick_slider');
 add_action("wp_enqueue_scripts","load_Js_Bootstrap");
 add_action("wp_enqueue_scripts","load_Css_Bootstrap");
 add_action( "wp_enqueue_scripts", "customCss" );
