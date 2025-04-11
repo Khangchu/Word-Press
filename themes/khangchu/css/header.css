@@ -326,6 +326,10 @@
         }
 }
 @media (min-width: 1025px) {
+    .news_column .panel-body .article img {
+        width: 90%;
+        height: auto;
+    }
     .fixed_social {
         position: fixed;
     }

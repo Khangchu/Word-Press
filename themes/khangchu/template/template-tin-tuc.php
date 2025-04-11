@@ -97,7 +97,7 @@ Template Name: Tin Tức
 
                                         $total = count($posts);
                                         for ($i = 0; $i < $total; $i += 2) {
-                                            echo '<li>';
+                                            echo '<li style= "width: 100%; display: inline-block;">';
                                             for ($j = 0; $j < 2 && ($i + $j) < $total; $j++) {
                                                 $p = $posts[$i + $j];
                                                 ?>
@@ -126,7 +126,6 @@ Template Name: Tin Tức
                                         }
                                         ?>
                                     </ul>
-
                                     <!-- Mobile Slider -->
                                     <ul class="news-slider show-slider-mobile">
                                         <?php
@@ -179,8 +178,6 @@ Template Name: Tin Tức
 <?php get_footer('footer') ?>
 <script>
 jQuery(document).ready(function($) {
-
-// Hàm khởi tạo Slick
 function initSlickSlider($context) {
     $context.find('.show-slider').not('.slick-initialized').slick({
         slidesToShow: 1,
@@ -193,29 +190,36 @@ function initSlickSlider($context) {
     $context.find('.show-slider-mobile').not('.slick-initialized').slick({
         slidesToShow: 1,
         slidesToScroll: 1,
-        
         arrows: true,
     });
 }
-
-// ✅ Khởi tạo Slick cho tab đầu tiên (đang active)
 initSlickSlider($('.newstabhomejcarousel-ctn.active'));
-
-// ✅ Khi click tab
 $('[data-toggle="newtabslide"]').on('click', function(e) {
     e.preventDefault();
-
     var target = $(this).attr('href');
-
-    // ✅ Nếu bạn muốn chuyển tab thì giữ lại phần này
     $('.newstabhomejcarousel-ctn').removeClass('active');
     $(target).addClass('active');
     $('.mtab a').removeClass('active');
     $(this).addClass('active');
-
-    // ✅ Chỉ khởi tạo Slick nếu chưa có
     initSlickSlider($(target));
 });
 });
-
 </script>
+
+<?php
+$terms = get_terms( 'tintuc' );
+
+echo '<ul>';
+
+foreach ( $terms as $term ) {
+    $term_link = get_term_link( $term );
+    if ( is_wp_error( $term_link ) ) {
+        continue;
+    }
+    echo '<li><a href="' . esc_url( $term_link ) . '">' . $term->name . '</a></li>';
+}
+
+echo '</ul>';
+?>
+
+?>
