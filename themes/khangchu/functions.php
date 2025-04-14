@@ -33,14 +33,33 @@ function tintuc_css () {
     wp_enqueue_style( "tintuc_css",  get_template_directory_uri(). '/css/tintuc.css', array(),"1.0.0", "all" );
 }
 function enqueue_slick_slider() {
-    // CSS
     wp_enqueue_style('slick-css', get_template_directory_uri() . '/css/slick.css');
     wp_enqueue_style('slick-theme', get_template_directory_uri() . '/css/slick-theme.css');
-
-    // JS (phụ thuộc jQuery)
     wp_enqueue_script('slick-js', get_template_directory_uri() . '/js/slick.min.js', array('jquery'), null, true);
 }
+function register_navwalker(){
+    register_nav_menus( array(
+        'primary' => __( 'Primary Menu' ),
+        'footer' => __( 'Footer Menu' ),
+    ) );
+}
+function enqueue_slimmenu_slider() {
+    wp_enqueue_script('jquery.slimmenu.js', get_template_directory_uri() . '/js/jquery.slimmenu.js', array('jquery'), null, true);
+    wp_enqueue_style('slimmenu-css', get_template_directory_uri() . '/css/slimmenu.css');
+
+}
+register_taxonomy('tintuc', 'post', [
+    'label' => 'Tin tức',
+    'hierarchical' => true,
+    'public' => true,
+    'show_ui' => true,
+    'show_in_menu' => true,
+    'show_in_nav_menus' => true, // <<< BẮT BUỘC PHẢI CÓ
+    'rewrite' => ['slug' => 'tintuc'],
+]);
+add_action( 'after_setup_theme', 'register_navwalker' );
 add_action('wp_enqueue_scripts', 'enqueue_slick_slider');
+add_action('wp_enqueue_scripts', 'enqueue_slimmenu_slider');
 add_action("wp_enqueue_scripts","load_Js_Bootstrap");
 add_action("wp_enqueue_scripts","load_Css_Bootstrap");
 add_action( "wp_enqueue_scripts", "customCss" );
@@ -54,3 +73,13 @@ add_action( "wp_enqueue_scripts", "gioithieu_css" );
 add_action( "wp_enqueue_scripts", "tintuc_css" );
 add_theme_support('post-thumbnails')
 ?>
+<?php
+add_filter('nav_menu_css_class', '__return_empty_array');
+add_filter('nav_menu_item_id', '__return_false');
+// Gỡ bỏ ID trong <ul> của wp_nav_menu
+add_filter('nav_menu_attributes', function($atts, $item, $args, $depth) {
+    if (isset($atts['id'])) {
+        unset($atts['id']);
+    }
+    return $atts;
+}, 10, 4);

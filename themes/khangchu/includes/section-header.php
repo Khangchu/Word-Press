@@ -97,7 +97,26 @@
         </div>
         <div class="mobile-menu-items"></div>
     </header>
-    <div class="section-nav home-header-nav"></div>
+    <div class="section-nav home-header-nav">
+        <div class="wraper">
+            <div class="container">
+                <div class="row">
+                    <div class="bg box-shadow">
+                    <?php
+wp_nav_menu([
+    'theme_location' => 'primary',
+    'container'      => false,                     // Không có <div> bao quanh
+    'menu_id'        => false,                     // Không tạo id cho <ul>
+    'menu_class'     => '',                        // Bỏ qua class mặc định
+    'items_wrap'     => '<ul class="slimmenu">%3$s</ul>', // Thêm class "khang" vào <ul>
+]);
+?>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -111,5 +130,15 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+jQuery(document).ready(function($) {
+    $('.slimmenu').slimmenu({
+        resizeWidth: '800',
+        collapserTitle: 'Main Menu',
+        animSpeed: 'medium',
+        indentChildren: true,
+        childrenIndenter: '&raquo;'
+    });
+});
+
 </script>
 
