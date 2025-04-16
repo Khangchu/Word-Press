@@ -922,8 +922,14 @@ ul.slimmenu .has-submenu .sub-toggle {
     display: none !important;
 }
 
-ul.slimmenu .has-submenu:hover > a {
+ul.slimmenu > li:hover > a {
     background-color: transparent !important;
-    color: #000;
+    color: red !important;
 }
-
+ul.slimmenu .has-submenu  .sub-menu > li:hover > a {
+    color: red !important;
+}
+.css-left .metismenu .sidebar-nav ul ul ul a {
+    padding-left: 30px !important;
+    font-size: 14px !important;
+}

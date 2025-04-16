@@ -57,6 +57,63 @@ register_taxonomy('tintuc', 'post', [
     'show_in_nav_menus' => true, // <<< BẮT BUỘC PHẢI CÓ
     'rewrite' => ['slug' => 'tintuc'],
 ]);
+function my_custom_term_redirect() {
+    $term = get_queried_object();
+
+    if ($term && isset($term->slug) && $term->slug === 'chuong-trinh-dao-tao-dh-truong-dien-dien-tu') {
+        $redirect_post_id = 183;
+        $redirect_url = get_permalink($redirect_post_id);
+
+        if ($redirect_url) {
+            wp_redirect($redirect_url);
+            exit;
+        }
+    }
+}
+// Thêm vào functions.php
+function show_posts_by_tuyensinh_term($atts) {
+    $atts = shortcode_atts([
+        'slug' => '',
+    ], $atts, 'list_tuyensinh');
+
+    if (!$atts['slug']) return '';
+
+    $args = [
+        'post_type' => 'post',
+        'posts_per_page' => -1,
+        'tax_query' => [
+            [
+                'taxonomy' => 'tuyensinh',
+                'field' => 'slug',
+                'terms' => $atts['slug'],
+            ],
+        ],
+    ];
+
+    $query = new WP_Query($args);
+
+    ob_start(); // để capture nội dung
+
+    if ($query->have_posts()) {
+        echo '<ul>';
+        while ($query->have_posts()) {
+            $query->the_post();
+            echo '<li class="custom-metis-sub-item">';
+            ?>
+                <a id="height-a" title="<?php the_title(); ?>" href="<?php the_permalink(); ?>" class="sf-with-ul">
+                    <?php the_title(); ?>
+                </a>
+            <?php
+            echo '</li>';
+        }
+        echo '</ul>';
+    }
+
+    wp_reset_postdata();
+    return ob_get_clean(); // trả về nội dung
+}
+add_shortcode('list_tuyensinh', 'show_posts_by_tuyensinh_term');
+add_action('template_redirect', 'my_custom_term_redirect');
 add_action( 'after_setup_theme', 'register_navwalker' );
 add_action('wp_enqueue_scripts', 'enqueue_slick_slider');
 add_action('wp_enqueue_scripts', 'enqueue_slimmenu_slider');
@@ -71,7 +128,9 @@ add_action( "wp_enqueue_scripts", "show_js" );
 add_action( "wp_enqueue_scripts", "trangchu_css" );
 add_action( "wp_enqueue_scripts", "gioithieu_css" );
 add_action( "wp_enqueue_scripts", "tintuc_css" );
-add_theme_support('post-thumbnails')
+add_action('after_setup_theme', function() {
+    add_theme_support('post-thumbnails');
+});
 ?>
 <?php
 add_filter('nav_menu_css_class', '__return_empty_array');

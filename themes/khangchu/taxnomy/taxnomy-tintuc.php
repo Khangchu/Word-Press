@@ -106,6 +106,29 @@ wp_reset_postdata();
 <div class="clearfix metismenu custom-metis">
     <aside class="sidebar">
         <nav class="sidebar-nav">
+            <ul id="menu_65">
+                                    <li class="active">
+                                                <ul class="collapse in">
+                                                <?php
+                                                    $terms = get_terms( 'tintuc' );
+                                                    
+                                                    if (!empty($terms) && !is_wp_error($terms)) {
+                                                        foreach ($terms as $term) {
+                                                            $term_link = get_term_link( $term )
+                                                           ?>
+                                                             <li class="custom-metis-sub-item active_sub ">
+                                    <a id="height-a" title="<?php echo $term->name?>" href="<?php echo esc_url( $term_link )?>" class="sf-with-ul"><?php echo $term->name?></a>
+                                                        </li>
+                                                           <?php
+                                                        }
+                                                    } else {
+                                                        echo 'Bài viết này không có tag nào trong taxonomy này.';
+                                                    }
+                                                    ?>
+
+                        </ul>
+                    </li>
+            </ul>
         </nav>
     </aside>
 </div>
